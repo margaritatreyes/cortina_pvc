@@ -1,27 +1,47 @@
 import streamlit as st
+import math
 
-def calcular_cortina(alto_puerta, ancho_puerta, ancho_producto, porcentaje_traslape):
-    # Calcular el traslape en metros basado en el porcentaje seleccionado
-    traslape = ancho_producto * (porcentaje_traslape / 100)
-    # Calcular el ancho efectivo de cada tira de cortina plástica
-    ancho_efectivo = ancho_producto - traslape
-    # Calcular la cantidad de tiras necesarias se agrega ancho puerta + translape porque representa el porcentaje de la primera y segunda tira sin translape
-    tiras_necesarias = ((ancho_puerta *100) + traslape) / ancho_efectivo
-    # Calcular la cantidad total de metros de cortina plástica necesarios
-    metros_necesarios = tiras_necesarias * (alto_puerta * 100)
-    return metros_necesarios
+def calcular_metros_tira(alto_puerta, ancho_puerta, ancho_tira_cm, traslape_lado_cm):
+    # Convertir el ancho de la tira y el traslape de cm a metros
+    ancho_tira = ancho_tira_cm / 100
+    traslape_lado = traslape_lado_cm / 100
+    # Calcular el ancho efectivo de cada tira
+    ancho_efectivo = ancho_tira - traslape_lado
+    # Calcular la cantidad de tiras necesarias
+    tiras_necesarias = math.ceil(ancho_puerta / (ancho_tira - traslape_lado))
+    # Calcular la cantidad de metros lineales que se van en las tiras necesarias
+    if tiras_necesarias <= 1:
+        metro_lineal_tira = (tiras_necesarias * ancho_tira )
+    elif tiras_necesarias == 2:
+        metro_lineal_tira = (tiras_necesarias * ancho_tira ) - traslape_lado
+    else:
+        metro_lineal_tira = (tiras_necesarias * (ancho_tira - traslape_lado)) + (traslape_lado)
 
-st.title("Calculadora de Cortina Plástica")
+    # Calcular la cantidad total de metros de tira necesarios
+    metros_necesarios = tiras_necesarias * alto_puerta
+    return tiras_necesarias, metros_necesarios, metro_lineal_tira
 
+def redondear_a_multiplo_de_5(valor):
+    # Redondear hacia arriba al múltiplo de 5 más cercano
+    return math.ceil(valor / 5) * 5
+
+st.title("Calculadora de Metros de Cortina PVC")
+
+# Entrada del alto y ancho de la puerta
 alto_puerta = st.number_input("Alto de la puerta (metros):", min_value=0.0, format="%.2f")
 ancho_puerta = st.number_input("Ancho de la puerta (metros):", min_value=0.0, format="%.2f")
 
-# Seleccionar el porcentaje de traslape
-porcentaje_traslape = st.selectbox("Selecciona el porcentaje de traslape:", [25, 37, 50, 75])
+# Entrada del ancho de la tira y traslape
+ancho_tira = st.number_input("Ancho de la tira (cm):", min_value=0.0, format="%.2f")
+traslape_lado = st.number_input("Traslape por lado (cm):", min_value=0.0, format="%.2f")
 
 if st.button("Calcular"):
-    result_20cm = calcular_cortina(alto_puerta, ancho_puerta, 20, porcentaje_traslape)
-    result_30cm = calcular_cortina(alto_puerta, ancho_puerta, 30, porcentaje_traslape)
+    tiras_necesarias, metros_necesarios, metro_lineal_tira = calcular_metros_tira(alto_puerta, ancho_puerta, ancho_tira, traslape_lado)
+    
+    # Redondear los resultados al múltiplo de 5 más cercano
+    metros_necesarios_redondeado = redondear_a_multiplo_de_5(metros_necesarios)
 
-    st.write(f"Ancho del producto: 20 cm: {result_20cm:.2f} metros de cortina necesarios")
-    st.write(f"Ancho del producto: 30 cm: {result_30cm:.2f} metros de cortina necesarios")
+    st.write(f"Metros de cortina necesarios (sin redondear): {metros_necesarios:.2f} metros.")
+    st.write(f"Metros de cortina necesarios (redondeado al múltiplo de 5 más cercano): {metros_necesarios_redondeado} metros.")
+    st.write(f"Metros lineales en tiras: {metro_lineal_tira:.2f} metros.")   
+    st.write(f"Tiras necesarias: {tiras_necesarias} tiras.")
