@@ -1,3 +1,6 @@
+# Agregamos esta excepcion para que no se cree .DS_store en mi repositorio. Esto se crea automaticamente cuando se usa mac
+.DS_store
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
