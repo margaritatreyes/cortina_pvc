@@ -36,8 +36,10 @@ def redondear_a_multiplo_de_5(valor):
 
 
 st.title("Calculadora de Metros de Cortina PVC")
-st.markdown("Nota: El traslape de las tiras de 20cm son de (3.6cm = 36%) y (7.5cm = 75%) en las bases metalicas #4334 ")
-st.markdown("Nota: El traslape de las tiras de 20cm son de (4.2cm = 42%) y (9.2cm = 92%) en las bases metalicas #4335 ")
+st.markdown("Tiras de 20cm: ")
+st.markdown("El traslape de las tiras de 20cm son de (3.6cm = 36%) y (7.5cm = 75%) en las bases metalicas #4334 ")
+st.markdown("El traslape de las tiras de 20cm son de (4.2cm = 42%) y (9.2cm = 92%) en las bases metalicas #4335 ")
+st.markdown("Tiras de 30cm: ")
 st.markdown("Nota: El traslape de las tiras de 30cm son de (9.7cm = 64%) en las bases metalicas #4334 ")
 st.markdown("Nota: El traslape de las tiras de 30cm son de (10.4cm = 69%) en las bases metalicas #4335 ")
 
